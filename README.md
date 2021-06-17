@@ -19,5 +19,10 @@ mongoexport --uri=mongodb://127.0.0.1:27017 --db=aggregations --collection=stock
 
 2) The datasets can be restored also by using tool - MongoDB Compass.
 
+
 ## Contributing
 Pull requests are welcome. For major changes, please drop message to discuss what you would like to change.
+
+## Summary
+
+(1) basic-aggregation : basic examples for mongo database .agrgregation
