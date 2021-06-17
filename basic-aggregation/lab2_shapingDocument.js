@@ -17,6 +17,12 @@ var pipeline = [{
                 "$all": ["English", "Japanese"]
             }
         }
+    }, {
+        "$project": {
+            "_id": 0,
+            "title": 1,
+            "rated": 1
+        }
     }
 ]
 
@@ -30,8 +36,8 @@ db.movies.aggregate(pipeline).itcount()
 
 // Load validateLab1.js into mongo shell
 
-load('<your-directory-path>\\validateLab1.js')
+load('<your-directory-path>\\validateLab2.js')
 
 // Run validateLab1 validation method
 
-validateLab1(pipeline)
+validateLab2(pipeline)

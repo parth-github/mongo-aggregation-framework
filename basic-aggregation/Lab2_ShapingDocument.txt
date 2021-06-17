@@ -1,0 +1,24 @@
+PROBLEM #1:
+
+Using the same $match stage from the previous lab [Lab1_FilteringDocument.txt], add a $project stage 
+to only display the the title and film rating (title and rated fields).
+
+SOLUTION:
+
+Step 1:- Update previous lab by adding one more stage '$project' to only display the title and film rating (title and rated fields).
+
+	{
+	    "$project": {
+	        "_id": 0,
+			"title":1,
+	        "imdb.rating": 1
+	    }
+	}
+
+Step 2:- Load validateLab2.js
+
+	load('<your-directory-path>\\validateLab2.js')
+	
+Step 3:- Run the validateLab2 validation method.
+
+	validateLab2(<your-aggregation-pipeline>)

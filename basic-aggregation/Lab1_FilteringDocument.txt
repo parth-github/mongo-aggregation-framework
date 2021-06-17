@@ -49,24 +49,12 @@ Step 2:- Filter the documents in 'movies' collection to pass only the documents 
 	    }
 	}
 	
-Step 3:- Project the inclusion of required fields in the resulting documents.
+Step 3:- Find count of all filtered documents or pretty() print all the filtered documents.
 
-	{
-	    "$project": {
-	        "_id": 0,
-	        "imdb.rating": 1,
-	        "genres": 1,
-	        "rated": 1,
-	        "languages": 1
-	    }
-	}
-
-Step 4:- Find count of all filtered documents or pretty() print all the filtered documents.
-
-Step 5:- Load validateLab1.js into mongo shell
+Step 4:- Load validateLab1.js into mongo shell
 
 	load('validateLab1.js')
 	
-Step 6:- Run the validateLab1 validation method
+Step 5:- Run the validateLab1 validation method
 
 	validateLab1(<your-pipeline-stages>)
