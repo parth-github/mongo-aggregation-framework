@@ -1,0 +1,72 @@
+PROBLEM #1:
+
+Pick a movie for our next movie night! 
+
+Based on employee polling, it has been decided that potential movies must meet the following criteria :
+
+(A) imdb.rating is at least 7
+(B) genres does not contain "Crime" or "Horror"
+(C) rated is either "PG" or "G"
+(D) languages contains "English" and "Japanese"
+
+SOLUTION:
+
+Step 1:- Execute mongodb command to get information related to movies dataset
+
+db.movies.findOne()
+
+Step 2:- Filter the documents in 'movies' collection to pass only the documents that matches given stage(s):-
+
+(A) imdb.rating is at least 7
+
+	{
+	    "imdb.rating": {
+	        "$gte": 7
+	    }
+	}
+	
+(B) genres does not contain "Crime" or "Horror"
+
+	{
+	    "genres": {
+	        "$nin": ["Crime", "Horror"]
+	    }
+	}
+
+(C) rated is either "PG" or "G"
+
+	{
+	    "rated": {
+	        "$in": ["PG", "G"]
+	    }
+	}
+	
+(D) languages contains "English" and "Japanese"
+
+	{
+	    "languages": {
+	        "$all": ["English", "Japanese"]
+	    }
+	}
+	
+Step 3:- Project the inclusion of required fields in the resulting documents.
+
+	{
+	    "$project": {
+	        "_id": 0,
+	        "imdb.rating": 1,
+	        "genres": 1,
+	        "rated": 1,
+	        "languages": 1
+	    }
+	}
+
+Step 4:- Find count of all filtered documents or pretty() print all the filtered documents.
+
+Step 5:- Load validateLab1.js into mongo shell
+
+	load('validateLab1.js')
+	
+Step 6:- Run the validateLab1 validation method
+
+	validateLab1(<your-pipeline-stages>)
