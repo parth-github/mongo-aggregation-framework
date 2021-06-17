@@ -3,7 +3,7 @@ Mongo Database Aggregation sample and examples.
 
 ## Sample Datasets to use for executing MongoDB aggregation commands.
 
-Folder 'sample_datasets' contains sample databasets (*.json files ).
+Zipped Folder 'sample_datasets/aggregations.zip' contains sample databasets (*.json files ).
 
 ## Dataset Provider
 
@@ -12,7 +12,11 @@ learning purpose only. The database name used in examples is 'aggregations' and 
 created/restored inside the mentioned database.
 
 ## Load Sample Dataset
-1) Run 'mongoimport' tool from command line to load database into current mongo database server.
+1) Extract the zipped folder(aggregations.zip) in your local machine.
+2) Run 'mongoimport' tool from command line to load database into current mongo database server.
+
+mongoexport --uri=mongodb://127.0.0.1:27017 --db=aggregations --collection=stocks --out=<your-file-location>\sample_datasets\stocks.json --type json
+
 2) The datasets can be restored also by using tool - MongoDB Compass.
 
 ## Contributing
