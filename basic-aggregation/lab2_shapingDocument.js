@@ -1,5 +1,5 @@
 /* Basic Aggregation - $match and $project
-Lab - $match
+Lab - $project
 */
 
 var pipeline = [{

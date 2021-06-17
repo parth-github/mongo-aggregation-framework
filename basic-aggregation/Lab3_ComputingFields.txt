@@ -1,0 +1,36 @@
+PROBLEM #1:
+
+Using the Aggregation Framework, find a count of the number of movies that have a title composed of one word. 
+To clarify, "Cinderella" and "3-25" should count, where as "Cast Away" would not.
+
+Hint: Use '$split' and the '$size' expression in your pipeline stages.
+
+SOLUTION:
+
+Step 1:- Filter documents in 'movies' collection where title field is of string type only.
+
+	{
+	    $match: {
+	        "title": {
+	            "$type": "string"
+	        }
+	    }
+	}
+	
+Step 2:- Divide the 'title' in documents which has convoluted titles i.e title with multiple words.
+
+	{
+	    $split: ["$title", " "]
+	}
+	
+Step 3:- Match documents received after $project stages whose size is 1 after split operation on title field..
+		Size of array must be only 1 to select movie title with only one word.
+		
+	{
+	    "title": {
+	        $size: 1
+	    }
+	}
+	
+Step 4:- Count the number of documents after filtering done by pipeline stages.
+
