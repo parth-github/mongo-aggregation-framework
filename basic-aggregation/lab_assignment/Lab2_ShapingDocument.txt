@@ -8,12 +8,12 @@ SOLUTION:
 Step 1:- Update previous lab by adding one more stage '$project' to only display the title and film rating (title and rated fields).
 
 	{
-	    "$project": {
-	        "_id": 0,
-			"title":1,
-	        "imdb.rating": 1
-	    }
-	}
+        "$project": {
+            "_id": 0,
+            "title": 1,
+            "rated": 1
+        }
+    }
 
 Step 2:- Load validateLab2.js
 
