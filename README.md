@@ -27,7 +27,7 @@ OR,
 3) The datasets can be restored by using MongoDB Compass tool.
 
 
-## Summary Or Repository
+## Summary Of Repository
 
 (1) basic-aggregation - examples related to $match, Sproject, $map ,$setIntersection, $arrayElemAt, $split and other utility stages ($addFields, $skip,$count,$limit).
 
