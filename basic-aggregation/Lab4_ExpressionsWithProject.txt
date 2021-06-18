@@ -1,0 +1,143 @@
+PROBLEM #1: Work with data within arrays
+
+Let's find how many movies in our movies collection are a "labor of love", where the same person appears in cast, directors, and writers
+
+Hint: You will need to use $setIntersection operator in the aggregation pipeline to find out the result.
+
+	  Your dataset may have duplicate entries for some films. You do not need to count the duplicate entries.
+
+
+NOTE: Execute below query 
+		
+		db.movies.findOne({
+		    title: "Life Is Beautiful"
+		}, {
+		    _id: 0,
+		    cast: 1,
+		    writers: 1
+		})
+	
+	Output: {
+	    "cast": [
+	        "Roberto Benigni",
+	        "Nicoletta Braschi",
+	        "Giustino Durano",
+	        "Giorgio Cantarini"
+	    ],
+	    "writers": [
+	        "Vincenzo Cerami (story)",
+	        "Roberto Benigni (story)"
+	    ]
+	}
+	
+	Here, the few enteries are common in cast[] and writers[] but those enteries have extra information attached to those elements.
+	In this case " Vincenzo Cerami (story)" and "Roberto Benigni (story)"
+	
+	So, filter all these elements by splitting each elements of the writers[].
+
+	$map : Applies an expression/logic to each item in an array and returns an array with the applied results.
+	
+	$split : Divides a string into an array of substrings based on a delimiter.$split removes the delimiter and returns 
+			the resulting substrings as elements of an array
+			
+	$arrayElemAt : Returns the element at the specified array index.
+
+
+SOLUTION:
+
+Step 1:- First $match stage to filter out documents that are not an array 
+		 or have an empty array for the field(s) we are interested - cast, directors, writers
+
+	{
+	    "$match": {
+	        "writers": {
+	            $elemMatch: {
+	                $exists: true
+	            }
+	        },
+	        "cast": {
+	            $elemMatch: {
+	                $exists: true
+	            }
+	        },
+	        "directors": {
+	            $elemMatch: {
+	                $exists: true
+	            }
+	        }
+	    }
+	}
+		
+Step 2:- Next $project stage pipeline to remove "_id" field, and retain "cast", "directors" fields. 
+		Perform the cleaning up operation of 'writer' field as mentioned above in 'NOTES' section of this file.
+		Retain 'writer' field with new computed values.
+		
+		{
+		    "$project": {
+		        "writers": {
+		            "$map": {
+		                input: "$writers",  	// input - An expression(field value) that resolves to an array.
+		                as: "writer",   		// as - name for the variable that represents each individual element of the input array.
+		                in: {					// in -  expression that is applied to each element of the input array.
+														refer each element individually with variable name specified in as.
+		                    "$arrayElemAt": [{
+		                            "$split": ["$$writer", " ("]
+		                        },
+		                        0
+		                    ]
+		                }
+		            }
+		        },
+		        "cast": 1,
+		        "directors": 1
+		    }
+		}
+
+	
+Step 3:- Next $project stage to compute a new field called laboursOfLove that ensures the 
+		 intersection of cast, writers, and directors our newly cleaned laboursOfLove is greater than 0.
+		 
+		 $gt will return true or false.
+		
+		$setIntersection : Takes two or more arrays and returns an array that contains the elements that appear in every input array
+		
+		{
+		    "$project": {
+		        "laboursOfLove": {
+		            "$gt": [{
+		                    "$size": {
+		                        "$setIntersection": ["$cast", "$directors", "$writers"]
+		                    }
+		                }, 0]
+		        }
+		    }
+		}
+
+Step 4:- Next $match stage that only allows documents where 'laboursOfLove' is true.
+
+	{
+	    "$match": {
+	        "laboursOfLove": true
+	    }
+	}
+
+Step 5:- Lastly $count stage to count all documents returned by aggregation pipeline stages. or you can use itcount() too.
+	
+	{
+	    "$count": "laboursOfLove"
+	}
+	
+	// or
+
+  {
+      $match: {
+          labor_of_love: true
+      }
+  }
+  ]).itcount()
+
+	
+	
+	
+
+
