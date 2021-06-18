@@ -32,7 +32,7 @@ var favorites = [
     "Kevin Spacey",
     "George Clooney"]
 
-Step 1:- $match stage to filter documents based on below conditions:
+Step 2:- $match stage to filter documents based on below conditions:
 
 		(A) tomatoes.viewer.rating greater than or equal to 3
 		(B) movies released in the USA
@@ -52,7 +52,7 @@ Filter:
 	    }
 	}
 	
-Step 2 :- $project stage to calculate "num_favs" which represents how many 'favorites' are common in "cast" field of the documents.
+Step 3:- $project stage to calculate "num_favs" which represents how many 'favorites' are common in "cast" field of the documents.
 		  define tomatoes.viewer.rating, title, num_favs to be retained.
 		  
 	{
@@ -68,7 +68,7 @@ Step 2 :- $project stage to calculate "num_favs" which represents how many 'favo
         }
     }
 	
-Step 3:- Sort your results by num_favs, tomatoes.viewer.rating, and title, all in descending order.
+Step 4:- Sort your results by num_favs, tomatoes.viewer.rating, and title, all in descending order.
 
 	{
 	    "$sort": {
@@ -78,13 +78,13 @@ Step 3:- Sort your results by num_favs, tomatoes.viewer.rating, and title, all i
 	    }
 	}
 	
-Step 4:- Skip 24 documents to get the 25th title.
+Step 5:- Skip 24 documents to get the 25th title.
 
 	{
 	    "$skip": 24
 	}
  
-Step 5:- Limit the result to print only 1 document i.e 25th document
+Step 6:- Limit the result to print only 1 document i.e 25th document
 
 	{
 	    "$limit": 1
