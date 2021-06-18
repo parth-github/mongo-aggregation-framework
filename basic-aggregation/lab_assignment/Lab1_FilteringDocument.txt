@@ -15,9 +15,9 @@ Step 1:- Execute mongodb command to get information related to movies dataset
 
 db.movies.findOne()
 
-Step 2:- Filter the documents in 'movies' collection to pass only the documents that matches given stage(s):-
+Step 2:- $match stage to filter all documents in 'movies' collection based on given condition(s)
 
-(A) imdb.rating is at least 7
+(Condition #1) imdb.rating is at least 7
 
 	{
 	    "imdb.rating": {
@@ -25,7 +25,7 @@ Step 2:- Filter the documents in 'movies' collection to pass only the documents 
 	    }
 	}
 	
-(B) genres does not contain "Crime" or "Horror"
+(Condition #2) genres does not contain "Crime" or "Horror"
 
 	{
 	    "genres": {
@@ -33,7 +33,7 @@ Step 2:- Filter the documents in 'movies' collection to pass only the documents 
 	    }
 	}
 
-(C) rated is either "PG" or "G"
+(Condition #3) rated is either "PG" or "G"
 
 	{
 	    "rated": {
@@ -41,7 +41,7 @@ Step 2:- Filter the documents in 'movies' collection to pass only the documents 
 	    }
 	}
 	
-(D) languages contains "English" and "Japanese"
+(Condition #4) languages contains "English" and "Japanese"
 
 	{
 	    "languages": {
@@ -49,7 +49,26 @@ Step 2:- Filter the documents in 'movies' collection to pass only the documents 
 	    }
 	}
 	
-Step 3:- Find count of all filtered documents or pretty() print all the filtered documents.
+Filter :
+	
+	{
+	    "$match": {
+	        "imdb.rating": {
+	            "$gte": 7
+	        },
+	        "genres": {
+	            "$nin": ["Crime", "Horror"]
+	        },
+	        "rated": {
+	            "$in": ["PG", "G"]
+	        },
+	        "languages": {
+	            "$all": ["English", "Japanese"]
+	        }
+	    }
+	}
+	
+Step 3:- Count of all matched documents itcount() OR pretty() print all matched documents.
 
 Step 4:- Load validateLab1.js into mongo shell
 
