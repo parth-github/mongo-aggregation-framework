@@ -75,3 +75,53 @@ Step 4: Define aggregation operators to calculate standard deviation ($stdDevSam
 	
 Step 5: Aggregate the pipeline stages to calculate accumulated results.
 
+
+
+PROBLEM #2:
+ 
+From 'persons' collection find total number of persons for every gender group (male, female) and find average age per gender 
+for all the people who are older than 50 years. 
+
+Sort the returned results(documents) by number of persons in descending order.
+			
+SOLUTION: 
+
+Step 1:- $match stage to filter all documents based on given condition(s)
+
+	(A) People who are older than 50 years.
+	
+	{
+	    "$match": {
+	        "dob.age": {
+	            "$gt": 50
+	        }
+	    }
+	}
+	
+Step 2:- $group stage to group input documents by gender. Based on gender count total number of people for each gender.
+		 calculate average age for each gender.
+		 
+	{
+	    "$group": {
+	        "_id": {
+	            "gender": "$gender"
+	        },
+	        "totalCount": {
+	            "$sum": 1
+	        },
+	        "averageAge": {
+	            "$avg": "$dob.age"
+	        }
+	    }
+	}
+	
+Step 3:- Sort the returned results(documents) by number of persons in descending order.
+
+	{
+	    "$sort": {
+	        "totalCount": -1
+	    }
+	}
+	
+
+Step 4:- pretty() print the result on console or itcount() the total filtered accumulated documents from pipeline stages.
