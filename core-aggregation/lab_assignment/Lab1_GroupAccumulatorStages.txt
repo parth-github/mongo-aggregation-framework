@@ -1,5 +1,5 @@
 // Core Aggregation - Combining Information
-// Lab - $group and Accumulators
+// Lab - $group and Accumulators, $regex, $avg, $max, $min, $stdDevSamp
 
 PROBLEM #1
 
