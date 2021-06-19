@@ -1,0 +1,74 @@
+// Basic Aggregation - $match and $project
+// Lab - $project, $convert
+
+PROBLEM #1
+
+Include fields name.first, email, location.coordinates (in array) from 'persons' to display.
+
+The location field in 'persons' is currently an embedded document with string parameters.
+
+Convert location field to geoJSON object i.e { type: "Point", coordinates: [ <longitude>, <latitude> ] } having double parameters.
+
+
+SOLUTION :
+
+Step 1:- $project stage to include fields name.first, email, location.coordinates and exclude "_id" field for display of documents.
+		 Convert location.coordinates to geoJSON object.
+
+	{
+	    "$project": {
+	        "_id": 0,
+	        "name.first": 1,
+	        "email": 1,
+	        "location": {
+	            "type": "Point",
+	            "coordinates": ["$location.coordinates.longitude", "$location.coordinates.latitude"]
+	        }
+	    }
+	}
+
+
+Step 2:- Convert corordinates from string to double in same $project stage.
+
+	$convert : Converts a value to a specified type.
+	
+			 Syntax:
+				 {
+					 $convert: {
+						 input:  < expression > ,
+						 to:  < type expression > ,
+						 onError:  < expression > , // Optional.
+						 onNull:  < expression > // Optional.
+					 }
+				 }
+				 
+	Filter Stage :
+				 
+	{
+	    "$project": {
+	        "_id": 0,
+	        "name.first": 1,
+	        "email": 1,
+	        "location": {
+	            "type": "Point",
+	            "coordinates": [{
+	                    "$convert": {
+	                        "input": "$location.coordinates.longitude",
+	                        "to": "double",
+	                        "onError": "Unsupported Type Conversion",
+	                        "onNull": 0
+	                    }
+	                }, {
+	                    "$convert": {
+	                        "input": "$location.coordinates.latitude",
+	                        "to": "double",
+	                        "onError": "Unsupported Type Conversion",
+	                        "onNull": 0
+	                    }
+	                }
+	            ]
+	        }
+	    }
+	}
+	
+Step 3:- Aggregate the pipeline stages to pretty() print the filtered documents.
