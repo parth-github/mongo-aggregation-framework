@@ -8,9 +8,9 @@ Mongo Database Aggregation sample and examples.
 
 ## Sample Dataset Source
 
-Datasets have been provided by [MongoDB University](https://university.mongodb.com/) free of cost and to used for 
-learning purpose only. The database name used in examples is 'aggregations' and all collections (*.json files) are 
-created/restored inside the mentioned database.
+Datasets have been provided by [MongoDB University](https://university.mongodb.com/) and other MongoDB tutorials available free of cost, to be used for 
+learning purposes only. 
+The database name used in examples is 'aggregations' and the collections (*.json files) can be created/restored inside the mentioned database.
 
 ### Sample Datasets
 
