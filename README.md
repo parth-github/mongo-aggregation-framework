@@ -29,7 +29,9 @@ OR,
 
 ## Summary Of Repository
 
-(1) basic-aggregation - examples related to $match, Sproject, $map ,$setIntersection, $arrayElemAt, $split and other utility stages ($addFields, $skip,$count,$limit).
+(1) basic-aggregation - examples related to basic aggregation and utility stages - $match, $project, $map ,$setIntersection, $arrayElemAt, $split, $addFields
+
+(2) core-aggregation - examples related to accumulators ($group) stages - $group, $min, $max, $stdDevSamp (sample standard deviation) and $regex.
 
 ## Contributing
 Pull requests are welcome. For major changes, please drop message to discuss what you would like to change.
