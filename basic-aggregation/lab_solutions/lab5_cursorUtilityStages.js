@@ -86,4 +86,3 @@ var pipeline = [{
 
 // Aggregate the pipeline stages and pretty() print the output
 db.movies.aggregate(pipeline).pretty()
-

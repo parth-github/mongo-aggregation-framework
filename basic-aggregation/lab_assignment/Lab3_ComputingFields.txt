@@ -1,49 +1,48 @@
-/* Basic Aggregation - $match and $project
-Lab - Computing Fields
-*/
+//Basic Aggregation - $match and $project
+//Lab - Computing Fields $match, $project, $type, $split, $size
 
-PROBLEM #1:
 
-Using the Aggregation Framework, find a count of the number of movies that have a title composed of one word. 
+PROBLEM # 1:
+
+Using the Aggregation Framework, find a count of the number of movies that have a title composed of one word.
+
 To clarify, "Cinderella" and "3-25" should count, where as "Cast Away" would not.
 
 Hint: Use '$split' and the '$size' expression in your pipeline stages.
 
 SOLUTION:
 
-Step 1:- $match stage to ensure we filter all movies where the title is a string.
+Step 1:  - $match stage to ensure we filter all movies where the title is a string.
 
-	{
-	    "$match": {
-	        "title": {
-	            "$type": "string"
-	        }
-	    }
-	}
-	
-Step 2:- $project stage to divide/split the 'title' which has spaces . for ex: Cast Away cantains two strings with space - Cast Away
+{
+    "$match": {
+        "title": {
+            "$type": "string"
+        }
+    }
+}
 
-	{
-	    "$project": {
-	        "title": {
-	            "$split": ["$title", " "]
-	        },
-	        "_id": 0
-	    }
-	}
-	
-Step 3:- $match stage to filter documents which has only one element (size is 1) in the newly computed title field..
-		Size of array must be only 1 to select movie title with only one word.
-		
-	{
-	    "$match": {
-	        "title": {
-	            "$size": 1
-	        }
-	    }
-	}
-	
-Step 4:- Count all documents itcount(), after filtering done by multiple pipeline stages.
+Step 2:  - $project stage to divide / split the 'title' which has spaces. for ex: Cast Away contains two strings with space - Cast Away
 
+{
+    "$project": {
+        "title": {
+            "$split": ["$title", " "]
+        },
+        "_id": 0
+    }
+}
 
+Step 3:  - $match stage to filter documents which has only one element(size is 1) in the newly computed 'title' field.
 
+Size of array must be only 1 to select movie title with only one word.
+
+{
+    "$match": {
+        "title": {
+            "$size": 1
+        }
+    }
+}
+
+Step 4:  - Count all documents itcount(), after filtering done by multiple pipeline stages.

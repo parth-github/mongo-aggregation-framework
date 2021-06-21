@@ -1,0 +1,237 @@
+// Basic Aggregation - $match and $project
+// Lab - $project, $convert, $dateToParts
+
+// Date - Timezones Url : https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+
+PROBLEM # 1:
+
+Using our 'persons' collection, display the dob.date and age fields of all people who are older
+than 29 years of age but younger than 62 years of age.
+
+Convert the 'string' dob.date field to 'date' type field while displaying filtered documents.
+
+SOLUTION:
+
+Step 1:  - $match stage to filter all people based on given criteria - older than 29 years of age but younger than 62 years of age.
+
+{
+    "$match": {
+        "dob.age": {
+            "$gt": 29,
+            "$lt": 62,
+        }
+    }
+}
+
+Step 2:  - $project stage to only display dob.date field in 'date' type and age field excluding "id".
+
+{
+    "$project": {
+        "_id": 0,
+        "dateOfBirth": {
+            "$convert": {
+                "input": "$dob.date",
+                "to": "date",
+                "onError": "Unsupported date type",
+                "onNull": "null"
+            }
+        },
+        "dob.age": 1
+    }
+}
+
+Step 3:  - Accumulate the pipeline stages and pretty()to display the filtered documents.
+
+db.persons.aggregate( < your - pipeline > ).pretty()
+
+PROBLEM # 2:
+
+Using the above aggregation pipelins stage, return first two documents that individually lists year, month, day, hour, minute, second and millisecond
+properties of a given BSON date value.
+
+SOLUTION:
+
+Step 1:  - Use above pipeline[PROBLEM # 1: ]to filter documents and display age and dob.date fileds.
+
+{
+    "$match": {
+        "dob.age": {
+            "$gt": 29,
+            "$lt": 62,
+        }
+    }
+}, {
+    "$project": {
+        "_id": 0,
+        "dateOfBirth": {
+            "$convert": {
+                "input": "$dob.date",
+                "to": "date",
+                "onError": "Unsupported date type",
+                "onNull": "null"
+            }
+        },
+        "dob.age": 1
+    }
+}
+
+Step 2:  - Use $limit to limit the number of document to 1 to be passed to next pipeline stage.
+
+{
+    "$limit": 2
+}
+
+Step 3:  - Write another $project stage to extract individual properties of ISODate from incoming document dateOfBirth (dob.date) field.
+
+$dateToParts : Returns a document that contains the constituent parts of a given BSON Date value as individual properties.
+			   The properties returned are year, month, day, hour, minute, second and millisecond.
+
+				iso8601 (optional) property - set to true to return the parts representing an ISO week date. This returns a document where the
+				properties are isoWeekYear, isoWeek, isoDayOfWeek, hour, minute, second and millisecond.
+
+				timezone (optional) property - to use to format the date.By default, $dateToParts uses UTC.
+
+
+{
+	$dateToParts: {
+		' date ':  < dateExpression > ,
+		' timezone ':  < timezone > ,
+		' iso8601 ':  < boolean >
+	}
+}
+
+Filter:
+
+{
+    $dateToParts: {
+        "date": "$dateOfBirth"
+    }
+}
+
+OR,
+
+{
+    $dateToParts: {
+        "date": "$dateOfBirth",
+        "timezone": "Asia/Kolkata",
+        "iso8601": true
+    }
+}
+
+Step 4:- Accumulate the pipeline stages and pretty() to display the filtered documents.
+
+db.persons.aggregate( < your - pipeline > ).pretty()
+
+
+PROBLEM #3:
+
+Provide example for few handy date expression operators so as to display the detailed properties of ISODate field of any filtered documents.
+
+
+SOLUTION :
+
+$hour : Returns the hour for a date as a number between 0 and 23.
+
+$minute: Returns the minute for a date as a number between 0 and 59.
+
+$second : Returns the seconds for a date as a number between 0 and 60 (leap seconds).
+
+$millisecond : Returns the milliseconds of a date as a number between 0 and 999.
+
+$week : Returns the week number for a date as a number between 0 (the partial week that precedes the first Sunday of the year) and 53 (leap year).
+
+$month : Returns the month for a date as a number between 1 (January) and 12 (December).
+
+$year : Returns the year portion of a date.
+
+$dayOfWeek : Returns the day of the week for a date as a number between 1 (Sunday) and 7 (Saturday).
+
+$dayOfMonth : Returns the day of the month for a date as a number between 1 and 31.
+
+$dayOfYear : Returns the day of the year for a date as a number between 1 and 366 (leap year).
+
+$isoDayOfWeek : Returns the weekday number in ISO 8601 format, ranging from 1 (for Monday) to 7 (for Sunday).
+
+$isoWeek : Returns the week number in ISO 8601 format, ranging from 1 to 53.
+
+$isoWeekYear : Returns the year number in ISO 8601 format.
+
+
+Filter:
+
+{
+    year: {
+        $year: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    month: {
+        $month: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    day: {
+        $dayOfMonth: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    hour: {
+        $hour: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    minutes: {
+        $minute: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    seconds: {
+        $second: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    milliseconds: {
+        $millisecond: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    dayOfYear: {
+        $dayOfYear: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    dayOfWeek: {
+        $dayOfWeek: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    week: {
+        $week: {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    "isoDayOfWeek": {
+        "$isoDayOfWeek": {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    },
+    "isoWeek": {
+        "$isoWeek": {
+            "date":  < dateExpression > ,
+            "timezone":  < tzExpression > // optional
+        }
+    }
+}
+

@@ -25,9 +25,7 @@ var pipeline = [{
 ]
 
 // Calculate aggregate values for the data in a collection 'movies'
-
 db.movies.aggregate(pipeline).pretty()
 
 //Counts the number of documents remaining in a cursor.
-
 db.movies.aggregate(pipeline).itcount()

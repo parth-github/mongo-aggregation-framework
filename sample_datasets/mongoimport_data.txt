@@ -1,0 +1,35 @@
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=air_airlines --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\air_airlines.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=air_alliances --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\air_alliances.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=air_routes --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\air_routes.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=bronze_banking --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\bronze_banking.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=child_reference --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\child_reference.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=customers --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\customers.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=employees --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\employees.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=exoplanets --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\exoplanets.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=gold_banking --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\gold_banking.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=icecream_data --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\icecream_data.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=movies --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\movies.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=parent_reference --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\parent_reference.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=nycFacilities --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\nycFacilities.json --drop
+ 
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=silver_banking --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\silver_banking.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=solarSystem --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\solarSystem.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=aggregations --collection=stocks --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\stocks.json --drop
+
+mongoimport mongodb://127.0.0.1 --db=analytics --collection=persons --file=D:\repository\mongo-aggregation-framework\sample_datasets\aggregations\persons.json --jsonArray --drop
+

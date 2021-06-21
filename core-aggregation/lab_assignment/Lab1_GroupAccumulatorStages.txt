@@ -1,127 +1,129 @@
 // Core Aggregation - Combining Information
 // Lab - $group and Accumulators, $regex, $avg, $max, $min, $stdDevSamp
 
-PROBLEM #1
+PROBLEM # 1
 
-For all films that won at least 1 Oscar, calculate the standard deviation, highest, lowest, 
-and average imdb.rating. Use the sample standard deviation expression.
+For all films that won at least 1 Oscar, calculate the standard deviation, highest, lowest, and average imdb.rating.
 
-HINT - All movies in the collection that won an Oscar begin with a string resembling (for ex: Won 1 Oscar ) in their awards field
-	
-	db.movies.find({"title" : "Boys Town"}).pretty()
-	
-	Sample output : { "awards" : "3 wins." }
-					{ "awards" : "Won 2 Oscars. Another 1 win & 3 nominations." }
+Use the sample standard deviation expression.
 
+HINT - All movies in the collection that won an Oscar begin with a string resembling(for ex: Won 1 Oscar) in their awards field
 
-SOLUTION :
+db.movies.find({
+    "title": "Boys Town"
+}).pretty()
 
-Step 1: Define regular expression to search similar string(s)/patterns in 'awards' field. for ex: Won 2 Oscars
+Sample output: 
 
-	Required regular exspression : /Won \d{1,2} Oscars?/
-	
-	/.../ : slashes to enclose regular expression or pattern to be searched for.
-	
-	Won : literal match for the characters Won. case sensitive.
-	
-	\d : matches a digit (equivalent to [0-9]).
-	
-	{1,2} : matches the preceding character (or set of characters) for as many times as the value inside this bracket.
-			
-			{min,max} means that the preceding character is repeated at least min & at most max times. ex: {1,2}
-			
-	Oscar : literal match for the characters Oscar. case sensitive.
-	
-	s : literal matche for the character s. case sensitive
-	
-	? : matches the previous token between zero and one times, as many times as possible. (optional)
-	
+{
+    "awards": "Won 2 Oscars. Another 1 win & 3 nominations."
+}
+
+SOLUTION:
+
+Step 1: Define regular expression to search similar string(s) / patterns in 'awards' field. for ex: Won 2 Oscars
+
+Required regular exspression: /Won \d{1,2} Oscars?/
+
+/.../: slashes to enclose regular expression or pattern to be searched for .
+
+Won: literal match for the characters Won.case sensitive.
+
+d: matches a digit(equivalent to[0 - 9]).
+    
+{1,2} : matches the preceding character(or set of characters)for as many times as the value inside this bracket.
+
+{min,max} : means that the preceding character is repeated at least min & at most max times. ex: {1,2}
+
+Oscar: literal match for the characters Oscar, case sensitive.
+
+s: literal matche for the character s, case sensitive
+
+?  : matches the previous token between zero and one times, as many times as possible.(optional)
 
 Step 2: $match stage to filter all documents with matching pattern or regular exspression.
 
-	{
-	    $match: {
-	        "awards": {
-	            $regex: /Won \d{1,2} Oscars?/
-	        }
-	    }
-	}
-	
+{
+    $match: {
+        "awards": {
+            $regex: /Won \d{1,2} Oscars?/
+        }
+    }
+}
+
 Step 3: $group staage to group input documents by the specified _id (can be defined null to calculate accumulated values for all input documents)
 
-Step 4: Define aggregation operators to calculate standard deviation ($stdDevSamp), highest ($max), lowest ($min), and average imdb.rating ($avg)
+Step 4: Define aggregation operators to calculate standard deviation ($stdDevSamp), highest($max), lowest($min), and average imdb.rating($avg)
 
-	{
-	    "$group": {
-	        "_id": null,
-	        "count": {
-	            "$sum": 1
-	        },
-	        "highest_rating": {
-	            "$max": "$imdb.rating"
-	        },
-	        "lowest_rating": {
-	            "$min": "$imdb.rating"
-	        },
-	        "average_rating": {
-	            "$avg": "$imdb.rating"
-	        },
-	        "standard_deviation": {
-	            "$stdDevSamp": "$imdb.rating"
-	        }
+{
+    "$group": {
+        "_id": null,
+        "count": {
+            "$sum": 1
+        },
+        "highest_rating": {
+            "$max": "$imdb.rating"
+        },
+        "lowest_rating": {
+            "$min": "$imdb.rating"
+        },
+        "average_rating": {
+            "$avg": "$imdb.rating"
+        },
+        "standard_deviation": {
+            "$stdDevSamp": "$imdb.rating"
+        }
 
-	    }
-	}
-	
+    }
+}
+
 Step 5: Aggregate the pipeline stages to calculate accumulated results.
 
 
+PROBLEM # 2:
 
-PROBLEM #2:
- 
-From 'persons' collection find total number of persons for every gender group (male, female) and find average age per gender 
-for all the people who are older than 50 years. 
+From 'persons' collection find total number of persons for every gender group(male, female) and find average age per gender
+for all the people who are older than 50 years.
 
 Sort the returned results(documents) by number of persons in descending order.
-			
-SOLUTION: 
 
-Step 1:- $match stage to filter all documents based on given condition(s)
+SOLUTION:
 
-	(A) People who are older than 50 years.
-	
-	{
-	    "$match": {
-	        "dob.age": {
-	            "$gt": 50
-	        }
-	    }
-	}
-	
-Step 2:- $group stage to group input documents by gender. Based on gender count total number of people for each gender.
-		 calculate average age for each gender.
-		 
-	{
-	    "$group": {
-	        "_id": {
-	            "gender": "$gender"
-	        },
-	        "totalCount": {
-	            "$sum": 1
-	        },
-	        "averageAge": {
-	            "$avg": "$dob.age"
-	        }
-	    }
-	}
-	
-Step 3:- Sort the returned results(documents) by number of persons in descending order.
+Step 1:  - $match stage to filter all documents based on given condition(s)
 
-	{
-	    "$sort": {
-	        "totalCount": -1
-	    }
-	}
-	
+(A) People who are older than 50 years.
 
-Step 4:- pretty() print the result on console or itcount() the total filtered accumulated documents from pipeline stages.
+{
+    "$match": {
+        "dob.age": {
+            "$gt": 50
+        }
+    }
+}
+
+Step 2:  - $group stage to group input documents by gender.Based on gender count total number of people for each gender.
+		   calculate average age for each gender.
+		   
+{
+    "$group": {
+        "_id": {
+            "gender": "$gender"
+        },
+        "totalCount": {
+            "$sum": 1
+        },
+        "averageAge": {
+            "$avg": "$dob.age"
+        }
+    }
+}
+
+Step 3:  - Sort the returned results(documents)by number of persons in descending order.
+
+{
+    "$sort": {
+        "totalCount": -1
+    }
+}
+
+Step 4:  - pretty() print the result on console or itcount()the total filtered accumulated documents from pipeline stages.

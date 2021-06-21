@@ -66,10 +66,8 @@ var pipeline = [{
 
 
 // Calculate aggregate values for the data in a collection 'persons'
-
 db.persons.aggregate(pipeline).pretty()
 
 //Counts the number of documents remaining in a cursor.
-
 db.persons.aggregate(pipeline).itcount()
 

@@ -58,9 +58,7 @@ var pipeline = [{
 ]
 
 // Print count of movies in our 'movies' collection which are a "labor of love"
-
 db.movies.aggregate(pipeline)
 
 // If $count stage is not used as a pipeline in above query then use 
-
 db.movies.aggregate(pipeline).itcount()

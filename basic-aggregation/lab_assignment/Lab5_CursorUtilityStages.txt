@@ -1,9 +1,9 @@
 // Basic Aggregation - Utility Stages
-// Lab: Using Cursor-like Stages
+// Lab: Using Cursor-like Stages - $setIntersection, $limit, $skip
 
-PROBLEM #1
+PROBLEM # 1
 
-MongoDB has another movie night scheduled. This time, we polled employees for their favorite actress or actor, and got these results.
+MongoDB has another movie night scheduled.This time, we polled employees for their favorite actress or actor, and got these results.
 
 favorites = [
     "Sandra Bullock",
@@ -11,19 +11,17 @@ favorites = [
     "Julia Roberts",
     "Kevin Spacey",
     "George Clooney"]
-	
-	
-For movies released in the USA with a tomatoes.viewer.rating greater than or equal to 3, calculate a new field called num_favs 
+
+For movies released in the USA with a tomatoes.viewer.rating greater than or equal to 3, calculate a new field called num_favs
 that represets how many favorites appear in the cast field of the movie.
 
 Sort your results by num_favs, tomatoes.viewer.rating, and title, all in descending order.
 
-What is the title of the 25th film in the aggregation result?
-
+What is the title of the 25th film in the aggregation result ?
 
 SOLUTION :
 
-Step 1:- Store our 'favorites' in a variable for easy reference within the pipeline.
+Step 1:  - Store our 'favorites' in a variable for easy reference within the pipeline.
 
 var favorites = [
     "Sandra Bullock",
@@ -32,61 +30,60 @@ var favorites = [
     "Kevin Spacey",
     "George Clooney"]
 
-Step 2:- $match stage to filter documents based on below conditions:
+Step 2:  - $match stage to filter documents based on below conditions:
 
-		(A) tomatoes.viewer.rating greater than or equal to 3
-		(B) movies released in the USA
-		(C) elements in 'cast' matches any of the elements in 'favorites' array.
-		
+(A) tomatoes.viewer.rating greater than or equal to 3
+(B) movies released in the USA
+(C) elements in 'cast' matches any of the elements in 'favorites' array.
+
 Filter:
 
-	{
-	    "$match": {
-	        "tomatoes.viewer.rating": {
-	            "$gte": 3
-	        },
-	        "countries": "USA",
-	        "cast": {
-	            "$in": favorites
-	        }
-	    }
-	}
-	
-Step 3:- $project stage to calculate "num_favs" which represents how many 'favorites' are common in "cast" field of the documents.
-		  define tomatoes.viewer.rating, title, num_favs to be retained.
-		  
-	{
-        "$project": {
-            "_id": 0,
-            "title": 1,
-			"tomatoes.viewer.rating": 1,
-            "num_favs": {
-                "$size": {
-                    "$setIntersection": ["$cast", favorites]
-                }
+{
+    "$match": {
+        "tomatoes.viewer.rating": {
+            "$gte": 3
+        },
+        "countries": "USA",
+        "cast": {
+            "$in": favorites
+        }
+    }
+}
+
+Step 3:  - $project stage to calculate "num_favs" which represents how many 'favorites' are common in "cast" field of the documents.
+define tomatoes.viewer.rating, title, num_favs to be retained.
+
+{
+    "$project": {
+        "_id": 0,
+        "title": 1,
+        "tomatoes.viewer.rating": 1,
+        "num_favs": {
+            "$size": {
+                "$setIntersection": ["$cast", favorites]
             }
         }
     }
-	
-Step 4:- Sort your results by num_favs, tomatoes.viewer.rating, and title, all in descending order.
+}
 
-	{
-	    "$sort": {
-	        "num_favs": -1,
-	        "tomatoes.viewer.rating": -1,
-	        "title": -1
-	    }
-	}
-	
-Step 5:- Skip 24 documents to get the 25th title.
+Step 4:  - Sort your results by num_favs, tomatoes.viewer.rating, and title, all in descending order.
 
-	{
-	    "$skip": 24
-	}
- 
-Step 6:- Limit the result to print only 1 document i.e 25th document
+{
+    "$sort": {
+        "num_favs": -1,
+        "tomatoes.viewer.rating": -1,
+        "title": -1
+    }
+}
 
-	{
-	    "$limit": 1
-	}
- 
+Step 5:  - Skip 24 documents to get the 25th title.
+
+{
+    "$skip": 24
+}
+
+Step 6:  - Limit the result to print only 1 document i.e 25th document
+
+{
+    "$limit": 1
+}
