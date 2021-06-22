@@ -40,7 +40,7 @@ SOLUTION:
 
 Step 1:  - Store our x_max, x_min, min, max in corresponding variables for easy reference within the pipeline.
 
-Step 2:  - $match stage to filter documents based on above mentioned conditions in problem statement.
+Step 2:  - $match stage to filter documents based on the above-mentioned conditions in the problem statement.
 
 {
     "$match": {
