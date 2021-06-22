@@ -8,13 +8,13 @@ Pick a movie for our next movie night!
 Based on employee polling, it has been decided that potential movies must meet the following criteria:
 
 (A) imdb.rating is at least 7
-(B) genres does not contain "Crime" or "Horror"
+(B) genres do not contain "Crime" or "Horror"
 (C) rated is either "PG" or "G"
-(D) languages contains "English" and "Japanese"
+(D) language contains "English" and "Japanese"
 
 SOLUTION:
 
-Step 1:  - Execute mongodb command to get information related to movies dataset
+Step 1:  - Execute MongoDB command to get information related to movies dataset
 
 db.movies.findOne()
 
@@ -28,7 +28,7 @@ Step 2:  - $match stage to filter all documents in 'movies' collection based on 
     }
 }
 
-(Condition # 2) genres does not contain "Crime" or "Horror"
+(Condition # 2) genres do not contain "Crime" or "Horror"
 
 {
     "genres": {
@@ -44,7 +44,7 @@ Step 2:  - $match stage to filter all documents in 'movies' collection based on 
     }
 }
 
-(Condition # 4) languages contains "English" and "Japanese"
+(Condition # 4) languages contain "English" and "Japanese"
 
 {
     "languages": {
@@ -73,7 +73,7 @@ Filter:
 
 Step 3:  - Count of all matched documents itcount() OR pretty() print all matched documents.
 
-Step 4:  - Load validateLab1.js into mongo shell
+Step 4:  - Load validateLab1.js into a mongo shell
 
 load('validateLab1.js')
 
