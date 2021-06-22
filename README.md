@@ -41,5 +41,5 @@ OR,
 * $sum, $min, $max, $stdDevSamp (sample standard deviation), $regex
 
 ## Contributing
-Pull requests are welcome. For major changes, please drop message to discuss what you would like to change.
+Pull requests are welcome. For major changes, please drop a message to discuss what you would like to change.
 
