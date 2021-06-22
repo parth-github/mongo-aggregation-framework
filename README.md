@@ -18,13 +18,13 @@ Zipped Folder 'sample_datasets/aggregations.zip' contains sample databasets (*.j
 
 ### Load Sample Dataset
 1) Extract the zipped folder(aggregations.zip) in your local machine.
-2) Run 'mongoimport' tool from command line to load database into current mongo database server.
+2) Run 'mongoimport' tool from the command line to load the database into the current mongo database server.
 
 mongoexport --uri=mongodb://127.0.0.1:27017 --db=aggregations --collection=stocks --out=<your-file-location>\sample_datasets\stocks.json --type json
 
 OR,
 
-3) The datasets can be restored by using MongoDB Compass tool.
+3) The datasets can be restored by using the MongoDB Compass tool.
 
 
 ## Summary Of Repository
@@ -36,7 +36,7 @@ OR,
 * $add, $subtract, $multiply, $divide, $convert, $dateToParts, $year, $month, $dayOfMonth. $hour, $minute, 
 * $second, $millisecond, $dayOfYear, $dayOfWeek,$week, $isoWeek, $isoDayOfWeek
 
-(2) core-aggregation - examples related to accumulators ($group) stages using below operatos..
+(2) core-aggregation - examples related to accumulators ($group) stages using below operators.
 
 * $sum, $min, $max, $stdDevSamp (sample standard deviation), $regex
 
