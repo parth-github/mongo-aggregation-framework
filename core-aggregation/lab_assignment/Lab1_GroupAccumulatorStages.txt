@@ -23,7 +23,7 @@ SOLUTION:
 
 Step 1: Define regular expression to search similar string(s) / patterns in 'awards' field. for ex: Won 2 Oscars
 
-Required regular exspression: /Won \d{1,2} Oscars?/
+Required regular expression: /Won \d{1,2} Oscars?/
 
 /.../: slashes to enclose regular expression or pattern to be searched for .
 
@@ -41,7 +41,7 @@ s: literal matche for the character s, case sensitive
 
 ?  : matches the previous token between zero and one times, as many times as possible.(optional)
 
-Step 2: $match stage to filter all documents with matching pattern or regular exspression.
+Step 2: $match stage to filter all documents with the matching pattern or regular expression.
 
 {
     $match: {
@@ -51,7 +51,7 @@ Step 2: $match stage to filter all documents with matching pattern or regular ex
     }
 }
 
-Step 3: $group staage to group input documents by the specified _id (can be defined null to calculate accumulated values for all input documents)
+Step 3: $group stage to group input documents by the specified _id (can be defined null to calculate accumulated values for all input documents)
 
 Step 4: Define aggregation operators to calculate standard deviation ($stdDevSamp), highest($max), lowest($min), and average imdb.rating($avg)
 
@@ -82,10 +82,10 @@ Step 5: Aggregate the pipeline stages to calculate accumulated results.
 
 PROBLEM # 2:
 
-From 'persons' collection find total number of persons for every gender group(male, female) and find average age per gender
+From the 'persons' collection find the total number of persons for every gender group(male, female) and find the average age per gender
 for all the people who are older than 50 years.
 
-Sort the returned results(documents) by number of persons in descending order.
+Sort the returned results(documents) by the number of persons in descending order.
 
 SOLUTION:
 
@@ -101,7 +101,7 @@ Step 1:  - $match stage to filter all documents based on given condition(s)
     }
 }
 
-Step 2:  - $group stage to group input documents by gender.Based on gender count total number of people for each gender.
+Step 2:  - $group stage to group input documents by gender. Based on gender count total number of people for each gender.
 		   calculate average age for each gender.
 		   
 {
@@ -118,7 +118,7 @@ Step 2:  - $group stage to group input documents by gender.Based on gender count
     }
 }
 
-Step 3:  - Sort the returned results(documents)by number of persons in descending order.
+Step 3:  - Sort the returned results(documents) by the number of persons in descending order.
 
 {
     "$sort": {
@@ -126,4 +126,4 @@ Step 3:  - Sort the returned results(documents)by number of persons in descendin
     }
 }
 
-Step 4:  - pretty() print the result on console or itcount()the total filtered accumulated documents from pipeline stages.
+Step 4:  - pretty() print the result on console or itcount() the total filtered accumulated documents from pipeline stages.
