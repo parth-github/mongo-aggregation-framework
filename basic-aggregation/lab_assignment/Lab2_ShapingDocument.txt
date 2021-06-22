@@ -9,7 +9,7 @@ to only display the title and film rating (title and rated fields).
 
 SOLUTION:
 
-Step 1:  - Update previous lab by adding one more stage '$project' to only display the title and film rating (title and rated fields).
+Step 1:  - Update the previous lab by adding one more stage '$project' to only display the title and film rating (title and rated fields).
 
 {
     "$project": {
@@ -36,7 +36,7 @@ Display gender and Full Name (in uppercase) fields of all documents.
 
 SOLUTION:
 
-Step 1:  - $project stage to add one new field "Full Name" by combining title, first, last fields of each documents.
+Step 1:  - $project stage to add one new field "Full Name" by combining title, first, last fields of each document.
 		   include "gender", "Full Name" fields for projection excluding "_id" field.
 
 $concat: Concatenates strings and returns the concatenated string.
@@ -74,16 +74,16 @@ OR,
     }
 }
 
-Step 2:  - Aggregate the pipeline and pretty() print to display resulting documents.
+Step 2:  - Aggregate the pipeline and pretty() print to display the resulting documents.
 
 PROBLEM # 3:
 
-Using the same aggregation pipeline stages as above[PROBLEM # 2] convert only the first charachter of fields(title, firlst, last) to Uppercase
-and append the rest of the word in normal casing i.e lowercase charachters.
+Using the same aggregation pipeline stages as above[PROBLEM # 2] convert only the first character of fields (title, first, last) to Uppercase
+and append the rest of the word in normal casing i.e lowercase characters.
 
 SOLUTION:
 
-Step 1:  - $project stage to apply operators to express string in the required format. (first charchter in to uppercase & following charachers in lowercase)
+Step 1:  - $project stage to apply operators to express string in the required format. (first character into uppercase & following characters in lowercase)
 
 $strLenCP: Returns the number of UTF - 8 code points in the specified string (a.k.a length of string).
 
