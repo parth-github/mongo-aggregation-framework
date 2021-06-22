@@ -33,7 +33,7 @@ Convert location.coordinates to geoJSON object.
     }
 }
 
-Step 2:  - Convert corordinates from string to double in same $project stage.
+Step 2:  - Convert coordinates from string to double in the same $project stage.
 
 $convert: Converts a value to a specified type.
 
