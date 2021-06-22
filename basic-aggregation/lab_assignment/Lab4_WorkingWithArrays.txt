@@ -3,9 +3,9 @@
 
 PROBLEM # 1: Work with data within arrays
 
-Let 's find how many movies in our movies collection are a "labor of love", where the same person appears in cast, directors, and writers
+Let's  find how many movies in our movies collection are a "labor of love", where the same person appears in cast, directors, and writers
 
-Hint: You will need to use $setIntersection operator in the aggregation pipeline to find out the result.
+Hint: You will need to use the $setIntersection operator in the aggregation pipeline to find out the result.
 
 	  Your dataset may have duplicate entries for some films. You do not need to count the duplicate entries.
 
@@ -33,10 +33,10 @@ Output: {
 	]
 }
 
-Here, the few enteries are common in cast[] and writers[] but those enteries have extra information attached to those elements.
+Here, the few entries are common in the cast[] and writers[] but those entries have extra information attached to those elements.
 In this case " Vincenzo Cerami (story)" and "Roberto Benigni (story)"
 
-So, filter all these elements by splitting each elements of the writers[].
+So, filter all these elements by splitting each element of the writers[].
 
 $map : Applies an expression/logic to each item in an array and returns an array with the applied results.
 
@@ -49,7 +49,7 @@ $arrayElemAt : Returns the element at the specified array index.
 SOLUTION:
 
 Step 1:- First $match stage to filter out documents that are not an array
-		 or have an empty array for the field(s) we are interested - cast, directors, writers
+		 or have an empty array for the field(s) we are interested in - cast, directors, writers
 
 	{
 	    "$match": {
@@ -72,7 +72,7 @@ Step 1:- First $match stage to filter out documents that are not an array
 	}
 
 Step 2:- Next $project stage pipeline to remove "_id" field, and retain "cast", "directors" fields.
-		 Perform the cleaning up operation of ' writer ' field as mentioned above in ' NOTES ' section of this file.
+		 Perform the cleaning up operation of the ' writer ' field as mentioned above in the ' NOTES ' section of this file
 		 
 		 Retain ' writer ' field with new computed values.
 
@@ -117,7 +117,7 @@ $setIntersection : Takes two or more arrays and returns an array that contains t
     }
 }
 
-Step 4:- Next $match stage that only allows documents where ' laboursOfLove ' is true.
+Step 4:- The next $match stage only allows documents where 'laboursOfLove' is true.
 
 {
     "$match": {
@@ -125,7 +125,7 @@ Step 4:- Next $match stage that only allows documents where ' laboursOfLove ' is
     }
 }
 
-Step 5:- Lastly $count stage to count all documents returned by aggregation pipeline stages. or you can use itcount() too.
+Step 5:- Lastly, $count stage to count all documents returned by aggregation pipeline stages. or you can use itcount() too.
 
 {
 "$count": "laboursOfLove"
