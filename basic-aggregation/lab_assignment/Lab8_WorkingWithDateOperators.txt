@@ -47,12 +47,12 @@ db.persons.aggregate( < your - pipeline > ).pretty()
 
 PROBLEM # 2:
 
-Using the above aggregation pipelins stage, return first two documents that individually lists year, month, day, hour, minute, second and millisecond
+Using the above aggregation pipeline stage, return the first two documents that individually list year, month, day, hour, minute, second, and millisecond
 properties of a given BSON date value.
 
 SOLUTION:
 
-Step 1:  - Use above pipeline[PROBLEM # 1: ]to filter documents and display age and dob.date fileds.
+Step 1:  - Use the above pipeline[PROBLEM # 1: ] to filter documents and display age and dob.date fields.
 
 {
     "$match": {
@@ -76,21 +76,21 @@ Step 1:  - Use above pipeline[PROBLEM # 1: ]to filter documents and display age 
     }
 }
 
-Step 2:  - Use $limit to limit the number of document to 1 to be passed to next pipeline stage.
+Step 2:  - Use $limit to limit the number of documents to 1 to be passed to the next pipeline stage.
 
 {
     "$limit": 2
 }
 
-Step 3:  - Write another $project stage to extract individual properties of ISODate from incoming document dateOfBirth (dob.date) field.
+Step 3:  - Write another $project stage to extract individual properties of ISODate rom the incoming document dateOfBirth (dob.date) field.
 
 $dateToParts : Returns a document that contains the constituent parts of a given BSON Date value as individual properties.
 			   The properties returned are year, month, day, hour, minute, second and millisecond.
 
-				iso8601 (optional) property - set to true to return the parts representing an ISO week date. This returns a document where the
+iso8601 (optional) property - set to true to return the parts representing an ISO week date. This returns a document where the
 				properties are isoWeekYear, isoWeek, isoDayOfWeek, hour, minute, second and millisecond.
 
-				timezone (optional) property - to use to format the date.By default, $dateToParts uses UTC.
+timezone (optional) property - to use to format the date.By default, $dateToParts uses UTC.
 
 
 {
@@ -126,7 +126,7 @@ db.persons.aggregate( < your - pipeline > ).pretty()
 
 PROBLEM #3:
 
-Provide example for few handy date expression operators so as to display the detailed properties of ISODate field of any filtered documents.
+Provide an example for few handy date expression operators to display the detailed properties of the ISODate field of any filtered documents.
 
 
 SOLUTION :
