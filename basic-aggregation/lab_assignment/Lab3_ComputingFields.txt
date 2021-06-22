@@ -22,7 +22,7 @@ Step 1:  - $match stage to ensure we filter all movies where the title is a stri
     }
 }
 
-Step 2:  - $project stage to divide / split the 'title' which has spaces. for ex: Cast Away contains two strings with space - Cast Away
+Step 2:  - $project stage to divide/split the 'title' which has spaces. for ex: Cast Away contains two strings with space - Cast Away
 
 {
     "$project": {
@@ -35,7 +35,7 @@ Step 2:  - $project stage to divide / split the 'title' which has spaces. for ex
 
 Step 3:  - $match stage to filter documents which has only one element(size is 1) in the newly computed 'title' field.
 
-Size of array must be only 1 to select movie title with only one word.
+The size of the array must be only 1 to select a movie title with only one word.
 
 {
     "$match": {
