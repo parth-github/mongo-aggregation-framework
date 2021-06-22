@@ -30,7 +30,7 @@ var favorites = [
     "Kevin Spacey",
     "George Clooney"]
 
-Step 2:  - $match stage to filter documents based on below conditions:
+Step 2:  - $match stage to filter documents based on the below conditions:
 
 (A) tomatoes.viewer.rating greater than or equal to 3
 (B) movies released in the USA
@@ -50,7 +50,7 @@ Filter:
     }
 }
 
-Step 3:  - $project stage to calculate "num_favs" which represents how many 'favorites' are common in "cast" field of the documents.
+Step 3:  - $project stage to calculate "num_favs" which represents how many 'favorites' are common in the "cast" field of the documents.
 define tomatoes.viewer.rating, title, num_favs to be retained.
 
 {
