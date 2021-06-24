@@ -1,4 +1,4 @@
-### <span style="color:orange">Dataset Folder Structure.</span>
+### <span style="color:&#x1F34E;">Dataset Folder Structure.</span>
 
 All sample datasets has database name as the folder name, and the collection name are same as respective *.json files inside each folders.
 
