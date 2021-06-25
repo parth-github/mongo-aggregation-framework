@@ -19,10 +19,6 @@ var pipeline = [{
     }
 ]
 
-// Aggregate the pipeline stages and pretty() print the output
-db.friends.aggregate(pipeline).pretty()
-
-
 /* Core Aggregation - Combining Information
 Solution for PROBLEM #2 - $group, $unwind, $push, $addToSet
 */
@@ -43,7 +39,6 @@ var pipeline = [{
         }
     }
 ]
-
 
 // Calculate aggregate values for the data in a collection 'friends'
 db.friends.aggregate(pipeline).pretty()

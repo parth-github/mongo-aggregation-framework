@@ -1,0 +1,187 @@
+// Core Aggregation - Combining Information
+// Lab - $project, $slice, $size, $filter
+
+$slice: projection operator specifies the number of elements in an array to return in the query result.
+
+Syntax:
+
+{
+     < arrayField > : {
+        $slice:  < number > 	// Specify a +ve number n to return the first n elements.
+    }							// Specify a -ve number n to return the last n elements.
+}
+
+OR,
+
+{
+     < arrayField > : {
+        $slice: [ <number to skip>, <number to return> ]	// <number to skip> +ve or -ve number n to return respective first or last n elements.
+    }														// <number to return> always a positive number n to return the next n elements,
+																starting after skipping the specified number.
+}
+
+$filter: Selects a subset of an array to return based on the specified condition. 
+Returns an array with only those elements that match the condition. 
+The returned elements are in the original order.
+
+Syntax:
+
+{
+    $filter: {
+        input:  < array >	// An expression that resolves to an array.
+        as:  < string > ,	// (Optional)A name for the variable that represents each individual element of the input array.
+							If no name is specified, the variable name defaults to this.
+        cond:  < expression >	// An expression that resolves to a boolean value used to determine if an element should be included in the output array.
+								// The expression references each element of the input array individually with the variable name specified in as.
+    }
+}
+
+PROBLEM #1: There is a requirement to project only condition based documents for 'examScores' field from our 'friends' collection.
+The condition are specified below:
+
+(A) Project only first element of field 'examScores'.
+(B) Project only last two elements of field 'examScores'
+(C) Project only one element after skipping first two elements of field 'examScores'
+(D) Project only second element after skipping first element of field 'examScores'
+(E) Project the size of array (length of field) for each field 'examScores'
+
+Tip: Array index starts with 0.
+
+
+SOLUTION:
+
+Step 1: $project stage to exclude "_id" field and include "examScores" in resulting document.
+
+(A) Project only first element of field 'examScores'.
+
+{
+    "$project": {
+        "_id": 0,
+        "examScore": {
+            "$slice": ["$examScores", 1]
+        }
+    }
+}
+
+(B) Project only last two elements of field 'examScores'
+
+{
+    "$project": {
+        "_id": 0,
+        "examScore": {
+            "$slice": ["$examScores", -2]
+        }
+    }
+}
+
+(C) Project only one element after skipping first two elements of field 'examScores'
+
+{
+    "$project": {
+        "_id": 0,
+        "examScore": {
+            "$slice": ["$examScores", 2, 1]
+        }
+    }
+}
+
+(D) Project only second element after skipping first element of field 'examScores'
+
+{
+    "$project": {
+        "_id": 0,
+        "examScore": {
+            "$slice": ["$examScores", 1, 1]
+        }
+    }
+}
+
+(E) Project the size of array (length of field) for each field 'examScores'
+
+{
+    "$project": {
+        "_id": 0,
+        "num_of_scores": {
+            "$size": "$examScores"
+        }
+    }
+}
+
+PROBLEM #2: Transform "examScores" field to be an array where the resulting document will have 'examScores.scores' greater than 60.
+
+SOLUTION: 
+
+Use $filter operator to filter embedded documents based on given condition which is projecting "examScore.scores" which are greater than 60.
+
+Step 1: $project stage to project filtered 'examScores.score' excluding "_id" filed in documents.
+
+{
+    "$project": {
+        "_id": 0,
+        "score": {
+            "$filter": {
+                "input": "$examScores",
+                "as": "sc",
+                "cond": {
+                    "$gt": ["$$sc.score", 60]
+                }
+            }
+        }
+    }
+
+}
+
+PROBLEM #3: Transform our 'friend' objects such that we only output the highest exam score for every person.
+
+SOLUTION:
+
+Can be done in multiple ways.
+
+(A) $project stage to filter all respective max element in all the embedded documents in 'examScores.score' field.
+
+{
+    "$project": {
+        "_id": 0,
+        "score": {
+            "$filter": {
+                "input": "$examScores",
+                "as": "sc",
+                "cond": {
+                    "$eq": ["$$sc.score", {
+                            "$max": "$examScores.score"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+}
+
+(B) $unwind stage to deconstruct all elements in array field "examScores". Project only id, name, age , examScore.score from the documents.
+$sort stage to sort all resulting documents by score values in descending order.
+$group stage to group documents by id, and calculate max score in the documents .
+
+
+{
+    "$unwind": "$examScores"
+}, {
+    "$project": {
+        "_id": 1,
+        "name": 1,
+        "age": 1,
+        "score": "$examScores.score"
+
+    }
+}, {
+    "$sort": {
+        "score": -1
+    }
+}, {
+    "$group": {
+        "_id": "$_id",
+        "max_score": {
+            "$max": "$score"
+        }
+    }
+}
