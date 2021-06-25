@@ -1,5 +1,5 @@
 ### Dataset Folder Structure.
-All sample datasets has database name as the folder name, and the collection name are same as respective *.json files inside each folders.
+All datasets [sample_datasets\zipped\] has database name as the folder name, and the collection names are same to respective *.json files inside each folders.
 
 ### How - To Import MongoDB datasets.
 
