@@ -8,7 +8,7 @@ Mongo Database Aggregation practice examples.
 ### Sample Dataset Source
 Datasets have been provided by [MongoDB University](https://university.mongodb.com/) and other MongoDB tutorials available free of cost,  
 to be used for learning purposes only.  
-The database name used in examples is same as folder name, and collection name same as *.json file names inside each dataset folder.
+The database name used in examples is same as folder name, and collection name as *.json files inside each dataset folder.
 
 ### Load Sample Dataset
 1. Unzip the zipped folder in your local directory.  

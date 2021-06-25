@@ -1,0 +1,127 @@
+// Core Aggregation - Combining Information
+// Lab - $group, $unwind, $push, $addToSet
+
+(1)$unwind: deconstructs any array field from the input documents to out document for each element(in array).
+Each output document is the input document with the value of the array field replaced by the element.
+
+Syntax: 
+
+{
+    $unwind:  < field path >
+} // pass the array field path.
+
+(2)$push: operator appends a specified value to an array.
+
+Syntax: 
+
+{
+    $push: {
+         < field1 > :  < value1 > ,
+        ...
+    }
+} 
+
+// To specify a <field> in an embedded document or in an array, use dot notation.
+
+
+(3)$addToSet: Returns an array of all unique values that results from applying an expression to each document
+in a group of documents that share the same group by key.
+
+$addToSet is only available in the $group stage.
+
+Syntax: 
+
+{
+    $addToSet:  < expression >
+}
+
+PROBLEM # 1: From our 'friends' collection aggregate the documents based on each age group and introduce new hobbies for every age group.
+
+SOLUTION:
+
+Step 1: First split the documents based on each element in 'hobbies' array.
+
+{
+    "$unwind": "$hobbies"
+}
+
+Step 2: Group all the multiple documents by age in $group stage.
+
+{
+    "$group": {
+        "_id": {
+            "age": "$age"
+        },
+        "count": {
+            "$sum": 1
+        }
+    }
+}
+
+Step 3: In same $group stage execute the operation to push new "allHobies" to the filtered documents.
+
+{
+    "$group": {
+        "_id": {
+            "age": "$age"
+        },
+        "count": {
+            "$sum": 1
+        },
+        "allHobbies": {
+            $push: "$hobbies"
+        }
+    }
+}
+
+Step 4: Aggregate the pipeline stages.
+
+Output : 
+
+{
+    "_id": {
+        "age": 30
+    },
+    "count": 2,
+    "allHobbies": [
+        "Eating",
+        "Data Analytics"
+    ]
+}{
+    "_id": {
+        "age": 29
+    },
+    "count": 4,
+    "allHobbies": [
+        "Sports",
+        "Cooking",   // Duplicate elements 'Cooking' is received in agggregated documents. 		
+        "Cooking",   // We dont want any duplicate values in our hobbies[].
+        "Skiing"
+    ]
+}
+
+PROBLEM # 2: As observed above after executing aggregated pipeline there are duplicate elements in hobbies[] of resulting document.
+So, change the aggregated pipeline stages to exclude duplicate enteries in hobbies[].
+
+SOLUTION: 
+
+Step 1: In the same aggregation pipeline(as above), use $addToSet(instead of $push)operator
+to exclude duplicate entries while pushing / adding new array field to the documents.
+
+{
+    "$group": {
+        "_id": {
+            "age": "$age"
+        },
+        "count": {
+            "$sum": 1
+        },
+        "allHobbies": {
+            "$addToSet": "$hobbies"
+        }
+    }
+}
+
+Step 2: Aggregate the pipeline states.
+
+db.friends.aggregate(pipeline).pretty()
