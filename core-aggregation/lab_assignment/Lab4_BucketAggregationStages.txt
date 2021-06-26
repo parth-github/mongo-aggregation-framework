@@ -1,5 +1,5 @@
 // Core Aggregation - Categorize Information
-// Lab - $bucket
+// Lab - $bucket, $bucketAuto
 
 $bucket : Categorizes incoming documents into groups, called buckets, based on specified expression, and bucket boundaries
 and outputs a document per each bucket.

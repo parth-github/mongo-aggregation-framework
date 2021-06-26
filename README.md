@@ -26,7 +26,8 @@ The database name used in examples is same as folder name, and collection name a
 
 - **core-aggregation** - examples related to accumulators ($group) stages using below operators.
 
-> *$sum, $min, $max, $stdDevSamp (sample standard deviation), $regex*
+> *$sum, $min, $max, $stdDevSamp (sample standard deviation), $regex, $unwind, $push, $addToSet*
+> *$truncat, $slice, $filter, $first, $bucket, $bucketAuto, $auto*
 
 ### Contributing
 Pull requests are welcome. For major changes, please drop a message to discuss what you would like to change.

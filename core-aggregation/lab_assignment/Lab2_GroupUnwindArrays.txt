@@ -100,7 +100,7 @@ Output :
     ]
 }
 
-PROBLEM # 2: As observed above after executing aggregated pipeline there are duplicate elements in hobbies[] of resulting document.
+PROBLEM #2: As observed above after executing aggregated pipeline there are duplicate elements in hobbies[] of resulting document.
 So, change the aggregated pipeline stages to exclude duplicate enteries in hobbies[].
 
 SOLUTION: 
@@ -125,3 +125,139 @@ to exclude duplicate entries while pushing / adding new array field to the docum
 Step 2: Aggregate the pipeline states.
 
 db.friends.aggregate(pipeline).pretty()
+
+
+PROBLEM #3: Explore our 'movies' collection in database 'aggregations'.
+
+Calculate how many movies every cast member has been in and get an average imdb.rating for each cast member.
+
+What is the name, number of movies, and average rating (truncated to one decimal) for the cast member that has been 
+in the most number of movies with English as an available language?
+
+SOLUTION:
+
+Step 1: First $match stage to filter all movies which contains :
+(a) 'cast' field and not empty.
+(b) 'languages' field and is 'English' only.
+
+{
+    "$match": {
+        "cast": {
+            "$exists": true,
+            "$ne": []
+        },
+        "languages": {
+            "$exists": true,
+            "$in": ["English"]
+        }
+    }
+}
+
+Step 2: Project only necessary data for following aggregation pipeline stages.
+include cast,imdb.rating and exclude _id in $project stage.
+
+{
+    "$project": {
+        "_id": 0,
+        "cast": 1,
+        "imdb.rating": 1
+    }
+}
+
+Step 3: $unwind stage to extract every entry in the 'cast' array and creating a document for each one.
+
+{
+    "$unwind": "$cast"
+}
+
+Step 4: $group stage to group cast members together by their name, totals the number of documents, and gets the average imdb.rating.
+
+{
+    "$group": {
+        "_id": "$cast",
+        "numFilms": {
+            "$sum": 1
+        },
+        "average": {
+            "$avg": "$imdb.rating"
+        }
+    }
+}
+
+Step 5: $project stage to truncate the imdb.rating to one decimal. This is done by first multiplying by 10, truncating the number, then dividing by 10.
+
+{
+    $project: {
+        numFilms: 1,
+        average: {
+            $divide: [{
+                    $trunc: {
+                        $multiply: ["$average", 10]
+                    }
+                }, 10
+            ]
+        }
+    }
+}
+
+Step 6: Sort our filtered documents in descending order to get the cast who has acted in highest number of movies.
+Limit the pipeline to display only 1 document.
+
+{
+    "$sort": {
+        "numFilms": -1
+    }
+}, {
+    "$limit": 1
+}
+
+Step 7: associalte all aggretion stages to get required result. 
+
+{
+    "$match": {
+        "cast": {
+            "$exists": true,
+            "$ne": []
+        },
+        "languages": {
+            "$exists": true,
+            "$in": ["English"]
+        }
+    }
+}, {
+    "$project": {
+        "_id": 0,
+        "cast": 1,
+        "imdb.rating": 1
+    }
+}, {
+    "$unwind": "$cast"
+}, {
+    "$group": {
+        "_id": "$cast",
+        "numFilms": {
+            "$sum": 1
+        },
+        "average": {
+            "$avg": "$imdb.rating"
+        }
+    }
+}, {
+    $project: {
+        numFilms: 1,
+        average: {
+            $divide: [{
+                    $trunc: {
+                        $multiply: ["$average", 10]
+                    }
+                }, 10
+            ]
+        }
+    }
+}, {
+    "$sort": {
+        "numFilms": -1
+    }
+}, {
+    "$limit": 1
+}
