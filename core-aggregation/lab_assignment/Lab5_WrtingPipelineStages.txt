@@ -1,0 +1,68 @@
+// Core Aggregation - Writing Pipeline Stages Into A New Collection
+// Lab - $out
+
+$out: Takes the documents returned by the aggregation pipeline and writes them to a specified collection.
+
+Syntax:
+
+{
+    $out: {
+        db: "<output-db>",
+        coll: "<output-collection>"
+    }
+}
+
+PROBLEM #1: From our 'persons' collection, convert location field to geoJSON object from 'string' to 'double' array, and 
+Project name.first, email, location.coordinates(in array) of all people who are older than 32 years.
+
+Sort the resulting documents by dob.age in descending order.
+
+Also, store the documents retured by aggregation pipeline stages to a new collection.
+
+
+SOLUTION: 
+
+Step 1: $match stage to filter documents where age is greater than 32 years.
+
+{
+    "$match": {
+        "$dob.age": {
+            "$gt": 32
+        }
+    }
+}
+
+Step 2: $project stage to display name.fist, email, location.coordinates exluding _id field from incoming document.
+
+{
+    "$project": "_id": 0,
+    "name.first": 1,
+    "email:1",
+    "dob.age": 1,
+    "location": {
+        "type": "Point",
+        "coordinates": ["location.coordinates.longitude", "location.coordinates.latitude"]
+    }
+}
+
+Step 2: $sort stage to sort the resulting documents by dob.age in descending order.
+
+{
+    "$sort": {
+        "dob.age": -1
+    }
+}
+
+Step 3: $out stage to write the documents returened by aggregaed pipeline stages results into a new collection.
+
+{
+    "$out": "aggregatedResult" // name of new collection - aggregatedResult
+}
+
+Step 4: Aggregate the pipeline stages.
+
+db.persons.aggregate(pipeline)
+
+Step 5: View the documents in newly created collection.
+
+db.aggregatedResult.find().pretty()
