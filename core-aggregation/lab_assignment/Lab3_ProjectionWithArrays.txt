@@ -1,5 +1,5 @@
 // Core Aggregation - Combining Information
-// Lab - $project, $slice, $size, $filter
+// Lab - $project, $slice, $size, $filter, $first
 
 $slice: projection operator specifies the number of elements in an array to return in the query result.
 

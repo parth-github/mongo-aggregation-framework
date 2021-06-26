@@ -63,7 +63,7 @@ var pipeline = [{
 ]
 
 /* Core Aggregation - Combining Information
-Solution for PROBLEM #2 - $project, $filter
+Solution for PROBLEM #2 - $project, $filter, $first
 */
 
 var pipeline = [{
@@ -130,6 +130,9 @@ var pipeline = [{
     }, {
         "$group": {
             "_id": "$_id",
+            "name": {
+                "$first": "$name"
+            },
             "max_score": {
                 "$max": "$score"
             }

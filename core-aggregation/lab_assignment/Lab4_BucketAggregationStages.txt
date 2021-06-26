@@ -1,0 +1,174 @@
+// Core Aggregation - Categorize Information
+// Lab - $bucket
+
+$bucket : Categorizes incoming documents into groups, called buckets, based on specified expression, and bucket boundaries
+and outputs a document per each bucket.
+
+The $bucket stage has a limit of 100 megabytes of RAM.
+
+By default, if the stage exceeds this limit, $bucket returns an error.
+
+Syntax :
+
+{
+    $bucket: {
+        groupBy:  < expression > ,
+        boundaries: [ < lowerbound1 > ,  < lowerbound2 > , ...],
+    default:
+         < literal > ,
+        output: {
+             < output1 > : {
+                 < $accumulator expression >
+            },
+            ...
+             < outputN > : {
+                 < $accumulator expression >
+            }
+        }
+    }
+}
+
+// groupBy : An expression to group documents by.
+
+// boundaries : (array). An array of values based on the groupBy expression that specify the boundaries for each bucket
+				ex: [ 0, 5, 10 ], creates two buckets:
+				[0, 5) with inclusive lower bound 0 and exclusive upper bound 5.
+				[5, 10) with inclusive lower bound 5 and exclusive upper bound 10.
+				
+// default : (optional) a literal that specifies the _id of an additional bucket that contains all documents 
+			 whose groupBy exspression result does not fall into a bucket specified by boundaries.
+			 
+// output : (document) optional. A document that specifies the fields to include in the output documents in addition to the _id field.
+
+
+$bucketAuto: Categorizes incoming documents into a specific number of groups, called buckets, based on a specified expression.
+Bucket boundaries are automatically determined in an attempt to evenly distribute the documents into the specified number of buckets.
+
+Syntax:
+
+{
+  $bucketAuto: {
+      groupBy: <expression>,
+      buckets: <number>,
+      output: {
+         <output1>: { <$accumulator expression> },
+         ...
+      }
+      granularity: <string>
+  }
+}
+
+// groupBy: An expression to group documents by.
+// buckets: A +ve 32-bit integer that specifies the number of buckets into which input documents are grouped.
+// output: (optional) A document that specifies the fields to include in the output documents in addition to the _id field.
+// granularity: (optional) Available only if the all groupBy values are numeric and none of them are NaN.
+
+
+PROBLEM #1: From our sample collection name 'persons' create :
+
+(1) Bucket by dob.age and filter based on count of total documents in the bucket.
+
+SOLUTION:
+
+Step 1:  $bucket stage to - group the documents into buckets by the dob.age field .
+
+"groupBy": "$dob.age",
+
+Step 2: Specify boundaries for the buckets :
+
+(A) [18, 36) with inclusive lowerbound 18 and exclusive upper bound 36.
+(B) [36, 54) with inclusive lowerbound 36 and exclusive upper bound 54.
+(C) [54, 72) with inclusive lowerbound 54 and exclusive upper bound 72.
+(D) If a document did not contain the dob.age field or its dob.age field was outside the ranges as stated above, 
+it would be placed in the default bucket with the _id value "Others".
+
+"boundaries": [18, 36, 54, 72],
+"default": "Others",
+
+Step 3: Output - to determine the fields to return in documents.
+For our requirement of output documents return count_of_people, and average_age in each age group.
+
+"output": {
+    "count_of_people": {
+        "$sum": 1
+    },
+    "average_age": {
+        "$avg": "$dob.age"
+    }
+}
+
+
+Step 4: associate all required conditions to $bucket stage.
+
+{
+    "$bucket": {
+        "groupBy": "$dob.age",
+        "boundaries": [18, 36, 54, 72],
+        "default": "Others",
+        "output": {
+            "count_of_people": {
+                "$sum": 1
+            },
+            "average_age": {
+                "$avg": "$dob.age"
+            }
+        }
+    }
+}
+
+PROBLEM #2: Introduce one new field 'Persons' to every age group which has the 
+name.first and name.last for every person into corresponding age category
+
+Step 1: $bucket stage as above . Push one new field 'Persons' that has concatenated first name and last name for every person 
+in that corresponding age group into our incoming documents after specified boundaries.
+
+"Persons": {
+    "$push": {
+        "name": {
+            "$concat": ["$name.first", " ", "$name.last"]
+        }
+    }
+}
+
+Step 2: associate new field 'Persons' to $bucket stage.
+
+{
+    "$bucket": {
+        "groupBy": "$dob.age",
+        "boundaries": [18, 36, 54, 72],
+        "default": "Others",
+        "output": {
+            "count_of_people": {
+                "$sum": 1
+            },
+            "Persons": {
+                "$push": {
+                    "name": {
+                        "$concat": ["$name.first", " ", "$name.last"]
+                    }
+                }
+            }
+        }
+    }
+}
+
+PROBLEM #3: Implement PROBLEM #1 and categorize incoming documents without any manual definition of 'boundaries'
+
+SOLUTION:
+
+Step 1: Use $bucketAuto stage instead of $buckets to automatically determine boundaries in an evenly manner.
+
+{
+    "$bucketAuto": {
+        "groupBy": "$dob.age",
+        "buckets": 4,
+        "output": {
+            "count_of_people": {
+                "$sum": 1
+            },
+            "average_age": {
+                "$avg": "$dob.age"
+            }
+        }
+    }
+}
