@@ -35,17 +35,17 @@ Syntax:
     $addToSet:  < expression >
 }
 
-PROBLEM # 1: From our 'friends' collection aggregate the documents based on each age group and introduce new hobbies for every age group.
+PROBLEM # 1: From our 'friends' collection aggregate, the documents which based on each age group and introduce new hobbies for every age group.
 
 SOLUTION:
 
-Step 1: First split the documents based on each element in 'hobbies' array.
+Step 1: First split the documents based on each element in the 'hobbies' array.
 
 {
     "$unwind": "$hobbies"
 }
 
-Step 2: Group all the multiple documents by age in $group stage.
+Step 2: Group all the multiple documents by age in the $group stage.
 
 {
     "$group": {
@@ -58,7 +58,7 @@ Step 2: Group all the multiple documents by age in $group stage.
     }
 }
 
-Step 3: In same $group stage execute the operation to push new "allHobies" to the filtered documents.
+Step 3: In the same $group stage execute the operation to push new "allHobies" to the filtered documents.
 
 {
     "$group": {
@@ -100,8 +100,8 @@ Output :
     ]
 }
 
-PROBLEM #2: As observed above after executing aggregated pipeline there are duplicate elements in hobbies[] of resulting document.
-So, change the aggregated pipeline stages to exclude duplicate enteries in hobbies[].
+PROBLEM #2: As observed above after executing aggregated pipeline there are duplicate elements in hobbies[] of the resulting document.
+So, change the aggregated pipeline stages to exclude duplicate entries in hobbies[].
 
 SOLUTION: 
 
@@ -122,7 +122,7 @@ to exclude duplicate entries while pushing / adding new array field to the docum
     }
 }
 
-Step 2: Aggregate the pipeline states.
+Step 2: Aggregate the pipeline stages.
 
 db.friends.aggregate(pipeline).pretty()
 
@@ -200,7 +200,7 @@ Step 5: $project stage to truncate the imdb.rating to one decimal. This is done 
     }
 }
 
-Step 6: Sort our filtered documents in descending order to get the cast who has acted in highest number of movies.
+Step 6: Sort our filtered documents in descending order to get the cast who has acted in the highest number of movies.
 Limit the pipeline to display only 1 document.
 
 {
@@ -211,7 +211,7 @@ Limit the pipeline to display only 1 document.
     "$limit": 1
 }
 
-Step 7: associalte all aggretion stages to get required result. 
+Step 7: associate all aggregation stages to get the required result. 
 
 {
     "$match": {
