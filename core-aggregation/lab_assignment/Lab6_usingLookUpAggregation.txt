@@ -1,0 +1,93 @@
+// Core Aggregation - Combining Information
+// Lab - $lookup, $graphLookup
+
+$lookup : Performs a left outer join to an unsharded collection in the same database 
+to filter in documents from the "joined" collection for processing.
+
+Syntax:
+
+{
+   $lookup:
+     {
+       from: <collection to join>,
+       localField: <field from the input documents>,
+       foreignField: <field from the documents of the "from" collection>,
+       as: <output array field>
+     }
+}
+
+PROBLEM #1: Fetch which alliance (name of alliance) from 'air_alliances' that are in associated with which 'air_airlines'.
+
+SOLUTION:
+
+Step 1: air_alliances has documents which has information that which alliance (name) is associated with respective airlines.
+
+air_airlines has information related to details of every airlines.
+
+Here, the requirement is to lookup to match documents from air_airlines on the value of their 'name' field
+against the current documents 'airlines' field.
+
+{
+    "$lookup": {
+        "from": "air_airlines",
+        "localField": "airlines",
+        "foreignField": "name",
+        "as": "airlines"
+    }
+}
+
+Step 2: Aggregate the pipeline stages for air_alliances.
+
+PROBLEM #2: Which alliance from air_alliances flies the most routes 
+with either a Boeing 747 or an Airbus A380 (abbreviated 747 and 380 in air_routes)?
+
+SOLUTION:
+
+Step 1: using regular expression match all the documents in air_routes that contains the string 747 or 380 in 'airplane' field.
+
+{
+    "$match": {
+        "airplane": /747|380/
+    }
+}
+
+Step 2:  $lookup stage to match documents from air_alliances on the value of their 'airlines' field 
+against the current document's 'airline.name' field.
+
+{
+    "$lookup": {
+        "from": "air_alliances",
+        "localField": "airline.name",
+        "foreignField": "airlines",
+        "as": "alliance"
+    }
+}
+
+Step 3: $unwind stage to create a document with each entry in alliance[] field.
+
+{
+    "$unwind": "$alliance"
+}
+
+Step 4: Group all documents by alliance.name and calculate total count for each alliance.
+
+{
+    "$group": {
+        "_id": "$alliance.name",
+        "count": {
+            "$sum": 1
+        }
+    }
+}
+
+Step 5: Sort the total count of each alliance in descending order.
+
+{
+    "$sort": {
+        "count": -1
+    }
+}
+
+Step 5: Aggregate the pipeline stags on 'air_routes' collection.
+
+
